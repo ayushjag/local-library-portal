@@ -22,8 +22,8 @@ const Login = () => {
         password,
       });
 
-      login(res.data.token); // Save token in context & localStorage
-      navigate("/"); // Redirect to homepage after login
+      login(res.data.token); 
+      navigate("/"); 
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     }

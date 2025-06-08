@@ -1,10 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import axiosInstance from "../utils/axiosInstance";  // use this if it adds token automatically
-import { AuthContext } from "../context/AuthContext";
-import formatDate from "../utils/formatDate";
+import axiosInstance from "../utils/axiosInstance";  
 
 const MyBooks = () => {
-  const { user, token } = useContext(AuthContext); // get token from context (or get it from localStorage if needed)
   const [borrowedBooks, setBorrowedBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -12,7 +9,7 @@ const MyBooks = () => {
   useEffect(() => {
     const fetchBorrowedBooks = async () => {
       try {
-        const res = await axiosInstance.get('/my-borrowed-books'); // baseURL should be set in axiosInstance
+        const res = await axiosInstance.get('/my-borrowed-books');
         setBorrowedBooks(res.data);
       } catch (error) {
         console.error(error);
@@ -35,15 +32,14 @@ const MyBooks = () => {
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">My Borrowed Books</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-       {borrowedBooks.map((item) => (
-  <div key={item.bookId._id} className="border p-4 rounded shadow">
-    <h3 className="text-lg font-semibold">{item.bookId.title}</h3>
-    <p>Author: {item.bookId.author}</p>
-    <p>Genre: {item.bookId.genre}</p>
-    <p>Borrowed Until: {formatDate(item.borrowedUntil)}</p>
-  </div>
-))}
-
+        {borrowedBooks.map((book) => (
+          <div key={book._id} className="border p-4 rounded shadow">
+            <h3 className="text-lg font-semibold">{book.title}</h3>
+            <p>Author: {book.author}</p>
+            <p>Genre: {book.genre}</p>
+            <p>Borrowed Until: {new Date(book.borrowedUntil).toLocaleDateString()}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
